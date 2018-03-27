@@ -6,6 +6,9 @@ var autoprefixer = require("gulp-autoprefixer");
 var frontnote = require("gulp-frontnote");
 
 var browser = require("browser-sync");
+var uglify = require("gulp-uglify");
+
+var babel = require("gulp-babel");
 
 gulp.task("sass", function() {
   gulp.src("sass/**/*scss")
@@ -21,10 +24,11 @@ gulp.task("sass", function() {
     .pipe(browser.reload({stream:true}));
 });
 
-var uglify = require("gulp-uglify");
+
 gulp.task("js", function() {
   gulp.src(["js/**/*.js","!js/min/**/*.js"])
     .pipe(plumber())
+    .pipe(babel())
     .pipe(uglify())
     .pipe(gulp.dest("./js/min"))
     .pipe(browser.reload({stream:true}));
@@ -46,5 +50,6 @@ gulp.task("imageMinTask", function() {
 });
 
 gulp.task("default", ['server'], function() {
-  gulp.watch(["js/**/*.js","!js/min/**/*.js"],["js"]);
-  gulp.watch("sass/**/*.scss",["sass"]);});
+  gulp.watch(["js/**/*.js","js/es6/**/*.js","!js/min/**/*.js"],["js"]);
+  gulp.watch("sass/**/*.scss",["sass"]);
+});
